@@ -1,7 +1,7 @@
 var utils    = require('../utils');
 var mongoose = require('mongoose');
 var Todo     = mongoose.model('Todo');
-var User     = mongoose.model('User');
+var user     = mongoose.model('User');
 // TODO:
 var hms = require('humanize-ms');
 var ms = require('ms');
@@ -36,7 +36,7 @@ exports.index = function (req, res, next) {
 
 exports.admin = function (req, res, next) {
   console.log(req.body);
-  User.find({ username: req.body.username, password: req.body.password }, function (err, users) {
+  user.find({ username: req.body.username, password: req.body.password }, function (err, users) {
     if (users.length > 0) {
       return res.render('admin', {
         title: 'Admin Access Granted',
@@ -229,28 +229,6 @@ exports.about_new = function (req, res, next) {
       });
 };
 
-// Prototype Pollution
-
-///////////////////////////////////////////////////////////////////////////////
-// In order of simplicity we are not using any database. But you can write the
-// same logic using MongoDB.
-const users = [
-  // You know password for the user.
-  {name: 'user', password: 'pwd'},
-  // You don't know password for the admin.
-  {name: 'admin', password: Math.random().toString(32), canDelete: true},
-];
-
-let messages = [];
-let lastId = 1;
-
-function findUser(auth) {
-  return users.find((u) =>
-    u.name === auth.name &&
-    u.password === auth.password);
-}
-///////////////////////////////////////////////////////////////////////////////
-
 exports.chat = {
   get(req, res) {
     res.send(messages);
@@ -289,3 +267,27 @@ exports.chat = {
     res.send({ok: true});
   }
 };
+
+
+// Prototype Pollution
+
+///////////////////////////////////////////////////////////////////////////////
+// In order of simplicity we are not using any database. But you can write the
+// same logic using MongoDB.
+const users = [
+  // You know password for the user.
+  {name: 'user', password: 'pwd'},
+  // You don't know password for the admin.
+  {name: 'admin', password: Math.random().toString(32), canDelete: true},
+];
+
+let messages = [];
+let lastId = 1;
+
+function findUser(auth) {
+  return users.find((u) =>
+    u.name === auth.name &&
+    u.password === auth.password);
+}
+///////////////////////////////////////////////////////////////////////////////
+
